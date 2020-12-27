@@ -1,14 +1,18 @@
 import { exec } from 'child_process';
 import util from 'util';
 
-const sh = util.promisify(exec);
+const shell = util.promisify(exec);
 
 export async function executeCommand(command: string) {
+  let status: number = 0;
   try {
-    await sh(command);
-    return true;
+    const { stdout } = await shell(command);
+    if (stdout) {
+      console.log(stdout);
+    }
+    status = 1;
   } catch (e) {
-    return false;
+    status = 2;
   }
+  return status;
 }
-
